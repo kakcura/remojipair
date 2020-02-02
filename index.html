@@ -1,0 +1,176 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="Repair emojis. (/◕ヮ◕)/">
+	<meta name="author" content="Korhan Akcura">
+	<title>Remojipair</title>
+
+	<link rel="icon" href="images/favicon.ico">
+	<!-- style sheets -->
+	<link rel="stylesheet" type="text/css" charset="utf-8" href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			font-family: Helvetica, Arial, sans-serif;
+		}
+
+		body {
+			background-color: #d3d3d3;
+		}
+
+		#remojipair-body .navbar {
+			margin-bottom: 5px;
+		}
+
+		#remojipair-body .navbar-brand {
+			padding: 5px 5px;
+		}
+
+		#remojipair-body .navbar-header{
+			margin-left:5px;
+			padding-right:5px;
+			width:100%;
+		}
+		#remojipair-body select {
+			align-items: flex-start;
+			height: 46px;
+			margin-right:5px;
+		}
+	</style>
+	</head>
+	<body id="remojipair-body">
+		<div id="header">
+			<nav class="navbar navbar-inverse">
+				<!-- Brand and toggle get grouped for better mobile display -->
+				<div class="navbar-header">
+					<a href="index.html" class="navbar-brand"><img class="img-fluid" style="display:inline;" src="images/icon.png"/> <b>Remojipair</b> - 🛠 +  😂. (/◕ヮ◕)/</a>
+					<div class="pull-right">
+					<button id="new-emoji" type="button" class="btn btn-light btn-lg" onclick="window.location.reload();">👀</button>
+					<button type="button" class="btn btn-light btn-lg" onclick="snapfit.admix(document.getElementById('emoji'));">🔀</button>
+					<button type="button" class="btn btn-light btn-lg" onclick="openHelp();">ℹ</button>
+					<button type="button" class="btn btn-light btn-lg" onclick="snapfit.solve(document.getElementById('emoji'));">😸</button>
+					<select id="difficulty" class="selectpicker btn-lg" data-style="btn-primary" size="1">
+						<option value="0" selected="selected">😄</option>
+						<option value="1">😊</option>
+						<option value="2">🙂</option>
+						<option value="3">😐</option>
+						<option value="4">😞</option>
+						<option value="5">😢</option>
+						<option value="6">😭</option>
+					</select>
+					</div>
+				</div>
+			</nav>
+		</div>
+		<main class="container-fluid" id="game-content">
+			<section class="row content-container text-center">
+				<div class="columns col-xs-12">
+					<div id="puzzle">
+						<img id="emoji" width="320" height="320" border="0" alt="..." />
+					</div>
+					<div id="won" style="display:none">
+						<div class="row">
+							<div class="columns col-xs-12">
+								<button type="button" class="btn btn-success btn-lg" style="width:200px;" onclick="window.location.reload();"><b>👀</b></button>
+								<button type="button" class="btn btn-warning btn-lg" style="width:200px;" onclick="returnTask();"><b>↩</b></button>
+							</div>
+							<div class="columns col-xs-12">
+								<img id="trophy" width="320" height="320" border="0" src="images/remojipaired.png" alt="Congraduations!" />
+							</div>
+						</div>
+					</div>
+					<div id="help" style="display:none">
+						<div class="row">
+							<div class="columns col-xs-12">
+								<button type="button" class="btn btn-warning btn-lg" style="width:200px;" onclick="closeHelp();"><b>↩</b></button>
+							</div>
+							<div class="columns col-xs-12">
+								<img width="640" border="1" src="images/help/1_right_spot_1.png" alt="1_right_spot_1.png" />
+								<img width="640" border="1" src="images/help/2_not_exactly_right_spot_1.png" alt="2_not_exactly_right_spot_1.png" />
+								<img width="640" border="1" src="images/help/3_right_spot_2.png" alt="3_right_spot_2.png" />
+								<img width="640" border="1" src="images/help/4_shuffle_1.png" alt="4_shuffle_1.png" />
+								<img width="640" border="1" src="images/help/5_right_click_1.png" alt="5_right_click_1.png" />
+								<img width="640" border="1" src="images/help/6_left_click_1.png" alt="6_left_click_1.png" />
+								<img width="640" border="1" src="images/help/7_cheat_1.png" alt="7_cheat_1.png" />
+								<img width="640" border="1" src="images/help/8_difficulty_1.png" alt="8_difficulty_1.png" />
+								<img width="640" border="1" src="images/help/9_new_emoji_1.png" alt="9_new_emoji_1.png" />
+							</div>
+							<div class="columns col-xs-12">
+								<button type="button" class="btn btn-warning btn-lg" style="width:200px;" onclick="closeHelp();"><b>↩</b></button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</main>
+		<!-- Hack to trigger auto music play. -->
+		<iframe src="music/silence-to-trigger-play.mp3" allow="autoplay" id="audio" style="display:none"></iframe>
+		<audio autoplay loop>
+			<source src="music/SafetyDance.mp3" type="audio/mpeg">
+		</audio>
+		<!-- Javascript -->
+		<script type="text/javascript" charset="utf-8" src="http://www.netzgesta.de/snapfit/snapfit.js"></script>
+		<script type="text/javascript" charset="utf-8" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+		<script type="text/javascript" charset="utf-8" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<script>
+			function taskComplate() {
+				$( "#puzzle" ).hide();
+				$( "#won" ).show();
+			}
+			function returnTask() {
+				$( "#won" ).hide();
+				$( "#puzzle" ).show();
+				$( "#new-emoji" ).removeClass("btn-light").addClass("btn-success");
+			}
+			function openHelp() {
+				$( "#puzzle" ).hide();
+				$( "#help" ).show();
+			}
+			function closeHelp() {
+				$( "#help" ).hide();
+				$( "#puzzle" ).show();
+			}
+			// Obtain a random emoji image from Openmoji.
+			function getRandomEmoji() {
+				random_emoji_hex = "1F" + (600 + Math.floor(Math.random() * 100));
+				return "https://openmoji.org/php/download_from_github.php?emoji_hexcode=" + random_emoji_hex + "&emoji_variant=color";
+			}
+			random_emoji_url = getRandomEmoji();
+			var error_counter = 0;
+			$( "#emoji" ).load(function() {
+				snapfit.add(document.getElementById('emoji'),{callback: function() {taskComplate();}, aborder:true, aimage:true, polygon:true, snap:1});
+				snapfit.reset(document.getElementById('emoji'),0);
+				setTimeout(function(){
+					// Break the emoji.
+					snapfit.admix(document.getElementById('emoji'));
+				},500);
+			}).error(function() {
+				error_counter++;
+				if (error_counter > 2) {
+					$(this).attr( "src", "images/remojipair.png" );
+				} else {
+					$( "#emoji" ).attr("src", getRandomEmoji());
+				}
+			}).attr("src", random_emoji_url);
+			// Configure emoji puzzle size.
+			var emoji_height = $(window).height() - 70;
+			var emoji_width = $("#emoji").width() * (emoji_height / $("#emoji").height())
+			$("#emoji").height(emoji_height);
+			$("#emoji").width(emoji_width);
+			$( "#difficulty" ).change(function() {
+				snapfit.reset(document.getElementById('emoji'),parseInt(this.options[this.selectedIndex].value));
+				setTimeout(function(){
+					// Break the emoji.
+					snapfit.admix(document.getElementById('emoji'));
+				},500);
+			});
+			$("#trophy").height(emoji_height);
+			$("#trophy").width(emoji_width);
+		</script>
+	</body>
+</html>
